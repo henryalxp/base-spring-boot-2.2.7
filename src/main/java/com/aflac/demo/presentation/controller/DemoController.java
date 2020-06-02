@@ -1,4 +1,4 @@
-package com.aflac.demo;
+package com.aflac.demo.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
