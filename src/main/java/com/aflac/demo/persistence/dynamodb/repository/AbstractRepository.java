@@ -3,6 +3,7 @@ package com.aflac.demo.persistence.dynamodb.repository;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 
@@ -36,6 +37,7 @@ public abstract class AbstractRepository<T, ID extends Serializable> {
     return mapper.scan(entityClass, scanExpression);
   }
 
+  @Autowired
   public void setMapper(DynamoDBMapper dynamoDBMapper) {
     this.mapper = dynamoDBMapper;
   }

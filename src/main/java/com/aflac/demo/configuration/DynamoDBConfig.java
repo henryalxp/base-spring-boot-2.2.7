@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 @EnableDynamoDBRepositories(basePackages = "com.aflac.demo.persistence.dynamodb.repository")
 public class DynamoDBConfig {
 
+  // XXX move this to a configuration file
   @Value("${amazon.dynamodb.endpoint}")
   private String amazonDynamoDBEndpoint;
 
