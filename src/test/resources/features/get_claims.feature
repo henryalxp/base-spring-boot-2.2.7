@@ -4,4 +4,4 @@ Feature: Get claims information
   Scenario: consumer makes call to GET /claims
     When the consumer calls /claims
     Then the consumer receives status code of 200
-    And the consumer receives a list of claims with attributes "id, description"
+    And the consumer receives a list of objects with attributes "id,description,status"

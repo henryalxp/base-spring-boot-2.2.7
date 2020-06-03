@@ -1,77 +1,39 @@
 package com.aflac.demo;
 
+import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.PostConstruct;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-import com.aflac.demo.domain.model.Claim;
-import com.aflac.demo.persistence.dynamodb.repository.ClaimRepository;
 import com.aflac.demo.util.HeaderSettingRequestCallback;
 import com.aflac.demo.util.ResponseResults;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ResourceInUseException;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Ignore
-public class SpringIntegrationTest {
+@Component
+@Profile("bdd")
+@Scope(SCOPE_CUCUMBER_GLUE)
+public class HttpClient {
 
-  protected static ResponseResults latestResponse = null;
+  protected ResponseResults latestResponse;
 
+  // XXX replace using web client
   protected RestTemplate restTemplate = new RestTemplate();
 
   @LocalServerPort
   protected int port;
 
-  @Autowired
-  private DynamoDBMapper dynamoDBMapper;
-
-  @Autowired
-  private AmazonDynamoDB amazonDynamoDB;
-
-  @Autowired
-  private ClaimRepository repository;
-
-  @PostConstruct
-  public void setup() {
-    // XXX move DynamoDb set up to a isolated component
-    try {
-      CreateTableRequest tableRequest =
-          dynamoDBMapper.generateCreateTableRequest(Claim.class);
-
-      tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-
-      amazonDynamoDB.createTable(tableRequest);
-
-      Claim claim = new Claim();
-      claim.setDescription("default description");
-      repository.save(claim);
-
-
-    } catch (ResourceInUseException e) {
-      // Do nothing, table already created
-      // XXX use a proper logging method
-      e.printStackTrace();
-    }
-
+  public ResponseResults getLatestResponse() {
+    return latestResponse;
   }
 
-  protected void executeGet(String url) throws IOException {
+  public void executeGet(String url) throws IOException {
     final Map<String, String> headers = new HashMap<>();
     headers.put("Accept", "application/json");
     final HeaderSettingRequestCallback requestCallback = new HeaderSettingRequestCallback(headers);
@@ -93,7 +55,7 @@ public class SpringIntegrationTest {
 
   }
 
-  protected void executePost(String url) throws IOException {
+  public void executePost(String url) throws IOException {
     final Map<String, String> headers = new HashMap<>();
     headers.put("Accept", "application/json");
     final HeaderSettingRequestCallback requestCallback = new HeaderSettingRequestCallback(headers);

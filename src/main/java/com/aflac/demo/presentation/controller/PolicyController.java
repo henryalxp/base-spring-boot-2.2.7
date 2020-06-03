@@ -5,25 +5,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.aflac.demo.presentation.service.ClaimService;
+import com.aflac.demo.presentation.service.PolicyService;
 
 @CrossOrigin
 @Controller
-public class ClaimController {
+public class PolicyController {
 
-  private ClaimService claimService;
+  private PolicyService policyService;
 
   @Autowired
-  public void setClaimService(ClaimService claimService) {
-    this.claimService = claimService;
+  public void setPolicyService(PolicyService policyService) {
+    this.policyService = policyService;
   }
 
-  @GetMapping("/claims")
+  @GetMapping("/policies")
   public ResponseEntity<?> getClaims() {
 
-    return ResponseEntity.ok(claimService.getClaims());
+    return ResponseEntity.ok(policyService.getPolicies());
 
   }
-
 
 }
