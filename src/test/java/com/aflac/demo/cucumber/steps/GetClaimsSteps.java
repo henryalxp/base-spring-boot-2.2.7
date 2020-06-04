@@ -2,7 +2,7 @@ package com.aflac.demo.cucumber.steps;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.aflac.demo.HttpClient;
+import com.aflac.demo.TestHttpClient;
 import com.aflac.demo.domain.model.Claim;
 import com.aflac.demo.persistence.dynamodb.repository.ClaimRepository;
 import io.cucumber.java.en.When;
@@ -10,7 +10,7 @@ import io.cucumber.java.en.When;
 public class GetClaimsSteps {
 
   @Autowired
-  private HttpClient httpClient;
+  private TestHttpClient httpClient;
 
   @Autowired
   private ClaimRepository claimRepository;

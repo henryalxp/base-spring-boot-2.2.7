@@ -3,6 +3,7 @@ package com.aflac.demo.cucumber.config;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import com.aflac.demo.LocalDynamoDbCreationRule;
+import com.aflac.demo.LocalZipCodeServerCreationRule;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
@@ -16,5 +17,8 @@ public class RunCucumberTest {
 
   @ClassRule
   public static LocalDynamoDbCreationRule dynamoDB = new LocalDynamoDbCreationRule();
+
+  @ClassRule
+  public static LocalZipCodeServerCreationRule zipCodeServer = new LocalZipCodeServerCreationRule();
 
 }

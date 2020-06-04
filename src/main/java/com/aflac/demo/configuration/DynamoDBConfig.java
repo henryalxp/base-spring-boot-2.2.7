@@ -1,7 +1,7 @@
 package com.aflac.demo.configuration;
 
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -15,22 +15,18 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 @EnableDynamoDBRepositories(basePackages = "com.aflac.demo.persistence.dynamodb.repository")
 public class DynamoDBConfig {
 
-  // XXX move this to a configuration file
-  @Value("${amazon.dynamodb.endpoint}")
-  private String amazonDynamoDBEndpoint;
+  @Autowired
+  private DynamoDBProperties dynamoDbProperties;
 
-  @Value("${amazon.aws.accesskey}")
-  private String amazonAWSAccessKey;
-
-  @Value("${amazon.aws.secretkey}")
-  private String amazonAWSSecretKey;
+  @Autowired
+  private AWSProperties awsProperties;
 
   @Bean
   public AmazonDynamoDB amazonDynamoDB() {
     AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
 
-    if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
-      amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
+    if (!StringUtils.isEmpty(dynamoDbProperties.getEndpoint())) {
+      amazonDynamoDB.setEndpoint(dynamoDbProperties.getEndpoint());
     }
 
     return amazonDynamoDB;
@@ -39,7 +35,8 @@ public class DynamoDBConfig {
   @Bean
   public AWSCredentials amazonAWSCredentials() {
     return new BasicAWSCredentials(
-        amazonAWSAccessKey, amazonAWSSecretKey);
+        awsProperties.getAccessKey(),
+        awsProperties.getSecretKey());
   }
 
 }
